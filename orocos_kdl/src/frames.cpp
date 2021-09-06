@@ -102,7 +102,7 @@ namespace KDL {
     // if v is smaller than eps, Vector(1,0) is returned with norm 0.
     // if this is not good, check the return value of this method.
     double Vector2::Normalize(double eps) {
-        double v = this->Norm();
+        double v = this->Norm(eps);
         if (v < eps) {
             *this = Vector2(1,0);
             return 0;
@@ -129,13 +129,22 @@ namespace KDL {
                 }
                 return tmp1*sqrt(1+sqr(data[1]/data[0])+sqr(data[2]/data[0]));
             } else {
+                if (tmp2 < eps) {
+                    return 0;
+                }
                 return tmp2*sqrt(1+sqr(data[0]/data[2])+sqr(data[1]/data[2]));
             }
         } else {
             tmp1=fabs(data[2]);
             if (tmp2 > tmp1) {
+                if (tmp2 < eps) {
+                    return 0;
+                }
                 return tmp2*sqrt(1+sqr(data[0]/data[1])+sqr(data[2]/data[1]));
             } else {
+                if (tmp1 < eps) {
+                    return 0;
+                }
                 return tmp1*sqrt(1+sqr(data[0]/data[2])+sqr(data[1]/data[2]));
             }
         }
@@ -422,8 +431,8 @@ double Rotation::GetRotAngle(Vector& axis,double eps) const {
     y = (data[2] - data[6]);
     z = (data[3] - data[1]);
     axis = KDL::Vector(x, y, z);
-    angle = atan2(axis.Norm()/2,f);
-    axis.Normalize();
+    angle = atan2(axis.Norm(0)/2,f);
+    axis.Normalize(0);
     return angle;
 }
 
