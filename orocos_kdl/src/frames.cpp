@@ -103,7 +103,7 @@ namespace KDL {
     // if this is not good, check the return value of this method.
     double Vector2::Normalize(double eps) {
         double v = this->Norm(eps);
-        if (v < eps) {
+        if (v < eps || v == 0) {
             *this = Vector2(1,0);
             return 0;
         } else {
@@ -154,8 +154,8 @@ namespace KDL {
     // if v is smaller than eps, Vector(1,0,0) is returned with norm 0.
     // if this is not good, check the return value of this method.
     double Vector::Normalize(double eps) {
-        double v = this->Norm();
-        if (v < eps) {
+        double v = this->Norm(eps);
+        if (v < eps || v == 0) {
             *this = Vector(1,0,0);
             return 0;
         } else {
